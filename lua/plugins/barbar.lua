@@ -17,6 +17,10 @@ return {
 		config = function()
 			vim.g.barbar_auto_setup = false
 
+            require("barbar").setup {
+                preset = 'slanted'
+            }
+
 			local map = vim.api.nvim_set_keymap
 			local opts = { noremap = true, silent = true }
 
