@@ -9,12 +9,12 @@ return {
         	float_opts = {
         		border = 'curved',
         		winblend = 0,
+                shading_factor = 15,
         		highlights = {
         			border = "Normal",
         			background = "Normal",
         		}
         	}
-
         })
     end
 }

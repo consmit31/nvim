@@ -3,11 +3,11 @@ return {
     lazy = false,
     build = ":TSUpdate",
     config = function()
-        local config = require("nvim-treesitter.config")
-        config.setup({
-            ensure_installed = { "lua" },
-            highlight = { enabled = true },
-            indent = { enabled = true },
+        require("nvim-treesitter").setup({
+            ensure_installed = { "lua", "elixir" },
+            auto_install = true,
+            highlight = { enable = true },
+            indent = { enable = true },
         })
     end
 }

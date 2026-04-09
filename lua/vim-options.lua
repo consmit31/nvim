@@ -9,3 +9,9 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
 vim.opt.clipboard = "unnamedplus"
+
+vim.api.nvim_create_autocmd("FileType", {
+    callback = function ()
+        pcall(vim.treesitter.start)
+    end
+})
