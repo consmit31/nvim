@@ -16,5 +16,22 @@ return {
         		}
         	}
         })
+
+        -- Open lazygit in a floating terminal with ctrl-g
+        -- Terminal should close when lazygit exits
+        local Terminal  = require('toggleterm.terminal').Terminal
+        local lazygit = Terminal:new({
+            cmd = "lazygit",
+            display_name = "lazygit",
+            direction = "float",
+            dir = ".",
+            close_on_exit = true,
+        })
+
+        function _lazygit_toggle()
+            lazygit:toggle()
+        end
+
+        vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
     end
 }
