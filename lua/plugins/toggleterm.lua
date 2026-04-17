@@ -19,8 +19,8 @@ return {
 
         -- Open lazygit in a floating terminal with ctrl-g
         -- Terminal should close when lazygit exits
-        local Terminal  = require('toggleterm.terminal').Terminal
-        local lazygit = Terminal:new({
+        local TerminalGit  = require('toggleterm.terminal').Terminal
+        local lazygit = TerminalGit:new({
             cmd = "lazygit",
             display_name = "lazygit",
             direction = "float",
@@ -32,6 +32,22 @@ return {
             lazygit:toggle()
         end
 
+        -- Open lazydocker in a floating terminal with ctrl-g
+        -- Terminal should close when lazygit exits
+        local TerminalDocker  = require('toggleterm.terminal').Terminal
+        local lazydocker = TerminalDocker:new({
+            cmd = "lazydocker",
+            display_name = "lazydocker",
+            direction = "float",
+            dir = ".",
+            close_on_exit = true,
+        })
+
+        function _lazydocker_toggle()
+            lazydocker:toggle()
+        end
+
         vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap("n", "<C-d>", "<cmd>lua _lazydocker_toggle()<CR>", { noremap = true, silent = true })
     end
 }

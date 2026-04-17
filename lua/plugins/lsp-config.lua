@@ -1,14 +1,25 @@
-return { { "mason-org/mason.nvim", opts = {}, }, { "mason-org/mason-lspconfig.nvim", dependencies = { { "mason-org/mason.nvim", opts = {} }, "neovim/nvim-lspconfig", }, opts = { ensure_installed = { "lua_ls", "ts_ls",
-				"jsonls",
-				"pyright",
-			},
+return {
+	{ "mason-org/mason.nvim", opts = {} },
+	{
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = { "mason-org/mason.nvim" },
+		opts = {
+			ensure_installed = { "tree-sitter-cli" },
+			auto_update = true,
+		},
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		dependencies = { { "mason-org/mason.nvim", opts = {} }, "neovim/nvim-lspconfig" },
+		opts = {
+			ensure_installed = { "lua_ls", "ts_ls", "jsonls", "pyright" },
 			automatic_installation = true,
 		},
 	},
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			vim.lsp.config("lua.ls", {
+			vim.lsp.config("lua_ls", {
 				settings = {
 					Lua = {
 						diagnostics = {
@@ -46,7 +57,7 @@ return { { "mason-org/mason.nvim", opts = {}, }, { "mason-org/mason-lspconfig.nv
 					map("<leader>rn", vim.lsp.buf.rename, "Rename Symbol")
 					map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
 					map("<leader>f", function()
-                        vim.lsp.buf.format({ async = true })
+						vim.lsp.buf.format({ async = true })
 					end, "Format buffer")
 				end,
 			})
