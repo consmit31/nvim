@@ -5,6 +5,10 @@ return {
     config = function()
         require("toggleterm").setup({
             open_mapping = [[<c-\>]],
+            start_in_insert = true,
+            on_open = function(_)
+                vim.cmd("startinsert!")
+            end,
         	direction = 'float',
         	float_opts = {
         		border = 'curved',
@@ -46,6 +50,11 @@ return {
         function _lazydocker_toggle()
             lazydocker:toggle()
         end
+
+        vim.api.nvim_create_autocmd("WinEnter", {
+            pattern = "term://*",
+            callback = function() vim.cmd("startinsert!") end,
+        })
 
         vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap("n", "<C-d>", "<cmd>lua _lazydocker_toggle()<CR>", { noremap = true, silent = true })
