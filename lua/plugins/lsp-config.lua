@@ -33,6 +33,20 @@ return {
 				settings = {},
 			})
 
+			vim.lsp.config("sourcekit", {
+				filetypes = { "swift", "objc", "objcpp" },
+				cmd = { vim.trim(vim.fn.system("xcrun -f sourcekit-lsp")) },
+				root_dir = function(_, callback)
+					local util = require("lspconfig.util")
+					callback(
+						util.root_pattern("buildServer.json", "Package.swift", "*.xcworkspace", "*.xcodeproj")(
+							vim.fn.getcwd()
+						) or util.find_git_ancestor(vim.fn.getcwd())
+					)
+				end,
+			})
+			vim.lsp.enable("sourcekit")
+
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(event)
 					local map = function(keys, func, desc)

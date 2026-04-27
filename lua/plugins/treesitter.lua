@@ -4,7 +4,7 @@ return {
     build = ":TSUpdate",
     config = function()
         require("nvim-treesitter").setup({
-            ensure_installed = { "lua", "elixir" },
+            ensure_installed = { "lua", "elixir", "swift" },
             auto_install = true,
         })
     end
