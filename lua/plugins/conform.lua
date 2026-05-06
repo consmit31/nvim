@@ -5,9 +5,11 @@ return {
 		require("conform").setup({
 			formatters_by_ft = {
 				swift = { "swiftformat" },
+				python = { "ruff_format" },
 			},
 			format_on_save = function(bufnr)
-				if vim.bo[bufnr].filetype ~= "swift" then
+				local ft = vim.bo[bufnr].filetype
+				if ft ~= "swift" and ft ~= "python" then
 					return
 				end
 				return { timeout_ms = 1000, lsp_fallback = false }
