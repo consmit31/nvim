@@ -141,12 +141,11 @@ Diagnostic list panel.
 | Key | Action |
 |-----|--------|
 | `<leader>xX` | All project diagnostics |
+| `<leader>xx` | Buffer diagnostics |
 | `<leader>cs` | Symbols panel |
 | `<leader>cl` | LSP definitions/references panel |
 | `<leader>xL` | Location list |
 | `<leader>xQ` | Quickfix list |
-
-> Note: `<leader>xx` is bound to xcodebuild QuickfixLine (see Xcode section).
 
 ---
 
@@ -203,21 +202,25 @@ Auto-lints Swift files with `swiftlint` on save, read, and leaving insert mode. 
 
 DAP UI opens/closes automatically on session start/end.
 
-### iOS / Xcode Debug
+### DAP Controls
 
 | Key | Action |
 |-----|--------|
-| `<leader>dd` | Build & debug |
-| `<leader>dr` | Debug without build |
-| `<leader>dt` | Debug tests |
-| `<leader>dT` | Debug class tests |
-| `<leader>b` | Toggle breakpoint |
-| `<leader>B` | Toggle message breakpoint |
-| `<leader>dx` | Terminate session |
 | `<leader>dc` | Continue |
 | `<leader>ds` | Step over |
 | `<leader>di` | Step into |
 | `<leader>do` | Step out |
+| `<leader>b` | Toggle breakpoint |
+| `<leader>B` | Conditional breakpoint |
+
+### JavaScript / TypeScript Debug (buffer-local, `.js/.ts/.jsx/.tsx` files)
+
+| Key | Mode | Action |
+|-----|------|--------|
+| `<leader>dd` | n | Start / continue |
+| `<leader>dx` | n | Terminate |
+
+Two launch configs available (selected via DAP prompt): **Launch file** (runs current file with Node) and **Attach** (attach to running process).
 
 ### Python Debug (buffer-local, `.py` files only)
 
@@ -228,33 +231,6 @@ DAP UI opens/closes automatically on session start/end.
 | `<leader>dT` | n | Debug test class |
 | `<leader>dv` | v | Debug selection |
 | `<leader>dx` | n | Terminate |
-
----
-
-## iOS / Xcode (xcodebuild.nvim)
-
-Requires project opened with `xcodebuild.nvim` setup. Logs auto-open on failure, auto-close on app launch.
-
-| Key | Mode | Action |
-|-----|------|--------|
-| `<leader>X` | n | Actions picker |
-| `<leader>xf` | n | Project manager |
-| `<leader>xb` | n | Build |
-| `<leader>xB` | n | Build for testing |
-| `<leader>xr` | n | Build & run |
-| `<leader>xt` | n | Run tests |
-| `<leader>xt` | v | Run selected tests |
-| `<leader>xT` | n | Run test class |
-| `<leader>xl` | n | Toggle logs |
-| `<leader>xc` | n | Toggle code coverage |
-| `<leader>xC` | n | Show coverage report |
-| `<leader>xE` | n | Test explorer |
-| `<leader>xs` | n | Failing snapshots |
-| `<leader>xd` | n | Select device |
-| `<leader>xp` | n | Select test plan |
-| `<leader>xq` | n | QuickFix list |
-| `<leader>xx` | n | Quickfix current line |
-| `<leader>xa` | n | Code actions |
 
 ---
 

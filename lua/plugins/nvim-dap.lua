@@ -2,35 +2,28 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		dependencies = {
-			"wojciech-kulik/xcodebuild.nvim",
 			"nvim-neotest/nvim-nio",
 			"rcarriga/nvim-dap-ui",
 			"jay-babu/mason-nvim-dap.nvim",
 			"thehamsta/nvim-dap-virtual-text",
 		},
 		config = function()
-			local xcodebuild = require("xcodebuild.integrations.dap")
-			xcodebuild.setup()
-
 			local dap = require("dap")
-			vim.keymap.set("n", "<leader>dd", xcodebuild.build_and_debug, { desc = "Debug: Build & Debug" })
-			vim.keymap.set("n", "<leader>dr", xcodebuild.debug_without_build, { desc = "Debug: Run (no build)" })
-			vim.keymap.set("n", "<leader>dt", xcodebuild.debug_tests, { desc = "Debug: Tests" })
-			vim.keymap.set("n", "<leader>dT", xcodebuild.debug_class_tests, { desc = "Debug: Class Tests" })
-			vim.keymap.set("n", "<leader>b", xcodebuild.toggle_breakpoint, { desc = "Debug: Toggle Breakpoint" })
-			vim.keymap.set("n", "<leader>B", xcodebuild.toggle_message_breakpoint, { desc = "Debug: Message Breakpoint" })
-			vim.keymap.set("n", "<leader>dx", xcodebuild.terminate_session, { desc = "Debug: Terminate" })
-			vim.keymap.set("n", "<leader>dc", dap.continue,   { desc = "Debug: Continue" })
-			vim.keymap.set("n", "<leader>ds", dap.step_over,  { desc = "Debug: Step Over" })
-			vim.keymap.set("n", "<leader>di", dap.step_into,  { desc = "Debug: Step Into" })
-			vim.keymap.set("n", "<leader>do", dap.step_out,   { desc = "Debug: Step Out" })
+			vim.keymap.set("n", "<leader>dc", dap.continue,                            { desc = "Debug: Continue" })
+			vim.keymap.set("n", "<leader>ds", dap.step_over,                           { desc = "Debug: Step Over" })
+			vim.keymap.set("n", "<leader>di", dap.step_into,                           { desc = "Debug: Step Into" })
+			vim.keymap.set("n", "<leader>do", dap.step_out,                            { desc = "Debug: Step Out" })
+			vim.keymap.set("n", "<leader>b",  dap.toggle_breakpoint,                   { desc = "Debug: Toggle Breakpoint" })
+			vim.keymap.set("n", "<leader>B",  function()
+				dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+			end,                                                                        { desc = "Debug: Conditional Breakpoint" })
 		end,
 	},
 	{
 		"jay-babu/mason-nvim-dap.nvim",
 		dependencies = { "mason-org/mason.nvim", "mfussenegger/nvim-dap" },
 		opts = {
-			ensure_installed = { "python" },
+			ensure_installed = { "python", "js-debug-adapter" },
 			automatic_installation = true,
 		},
 	},
@@ -51,6 +44,61 @@ return {
 			end
 			dap.listeners.before.event_exited.dapui_config = function()
 				dapui.close()
+			end
+		end,
+	},
+	{
+		"mfussenegger/nvim-dap",
+		ft = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+		config = function()
+			local dap = require("dap")
+			local mason_path = vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter"
+
+			dap.adapters["pwa-node"] = {
+				type = "server",
+				host = "localhost",
+				port = "${port}",
+				executable = {
+					command = "node",
+					args = { mason_path .. "/js-debug/src/dapDebugServer.js", "${port}" },
+				},
+			}
+
+			for _, lang in ipairs({ "javascript", "typescript", "javascriptreact", "typescriptreact" }) do
+				dap.configurations[lang] = {
+					{
+						type = "pwa-node",
+						request = "launch",
+						name = "Launch file",
+						program = "${file}",
+						cwd = "${workspaceFolder}",
+					},
+					{
+						type = "pwa-node",
+						request = "attach",
+						name = "Attach",
+						processId = require("dap.utils").pick_process,
+						cwd = "${workspaceFolder}",
+					},
+				}
+			end
+
+			local function setup_js_keymaps()
+				local map = function(keys, func, desc)
+					vim.keymap.set("n", keys, func, { buffer = true, desc = "Debug (JS): " .. desc })
+				end
+				map("<leader>dd", dap.continue,  "Start / Continue")
+				map("<leader>dx", dap.terminate, "Terminate")
+			end
+
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+				callback = setup_js_keymaps,
+			})
+
+			local ft = vim.bo.filetype
+			if vim.tbl_contains({ "javascript", "typescript", "javascriptreact", "typescriptreact" }, ft) then
+				setup_js_keymaps()
 			end
 		end,
 	},
