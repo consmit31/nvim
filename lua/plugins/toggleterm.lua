@@ -56,6 +56,12 @@ return {
             callback = function() vim.cmd("startinsert!") end,
         })
 
+        -- Terminal mode navigation (exit insert, then tmux-navigate)
+        vim.keymap.set("t", "<C-h>", "<C-\\><C-n><cmd>TmuxNavigateLeft<cr>",  { noremap = true, silent = true })
+        vim.keymap.set("t", "<C-j>", "<C-\\><C-n><cmd>TmuxNavigateDown<cr>",  { noremap = true, silent = true })
+        vim.keymap.set("t", "<C-k>", "<C-\\><C-n><cmd>TmuxNavigateUp<cr>",    { noremap = true, silent = true })
+        vim.keymap.set("t", "<C-l>", "<C-\\><C-n><cmd>TmuxNavigateRight<cr>", { noremap = true, silent = true })
+
         vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap("n", "<C-d>", "<cmd>lua _lazydocker_toggle()<CR>", { noremap = true, silent = true })
     end

@@ -1,6 +1,7 @@
 {
     "diagnostics.globals": [
         "vim",
-        "lualine_x"
+        "lualine_x",
+        "_lazygit_toggle"
     ]
 }
